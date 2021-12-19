@@ -1,18 +1,35 @@
 package com.ilya.investments.user;
 
-public class User {
-    private final long id;
-    private final String name;
-    private final String password;
+import javax.persistence.*;
 
-    public User(long id, String name, String password)
-    {
-        this.id = id;
+@Entity
+@Table(name = "user")
+
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private  String name;
+    private  String password;
+
+
+    public User(String name, String password) {
         this.name = name;
         this.password = password;
+
+    }
+    public User(int id, String name, String password)
+    {
+        this(name,  password);
+
+        this.id = id;
     }
 
-    public long getId()
+    public User() {
+
+    }
+
+    public int getId()
     {
         return id;
     }
@@ -28,4 +45,15 @@ public class User {
         return password;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

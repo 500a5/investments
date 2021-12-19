@@ -1,5 +1,8 @@
 package com.ilya.investments.user;
 
+import com.ilya.investments.repo.UserRepositiry;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -11,38 +14,46 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-        private final List<User> users = new ArrayList<>();
+
+        UserRepositiry userRepositiry;
+
+    @GetMapping
+    public List<User> list()
+    {
+        return userRepositiry.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public User user(@PathVariable int id)
+    {
+        return userRepositiry.findById(id).orElse(null);
+    }
 
         @GetMapping("/login")
-        private String login(@RequestParam String name,
-                             @RequestParam String password) {
-            User userToLogin = users.stream()
-                    .filter(user -> name.equals(user.getName()))
-                    .findFirst()
-                    .orElse(null);
-
-            String error = "null";
-            if (userToLogin != null)
+        private ResponseEntity<String> login(@RequestParam String name,
+                                             @RequestParam String password) {
+            User user = userRepositiry.findByName(name);
+            if (user != null)
             {
-                if (!password.equals(userToLogin.getPassword()))
+                if (!password.equals(user.getPassword()))
                 {
-                    error = "Password not correct";
+                    return new ResponseEntity<>("Invalid password", HttpStatus.BAD_REQUEST);
                 }
             }
             else
             {
-                error = "User not finded";
+                return new ResponseEntity<>("User doesn't exists", HttpStatus.BAD_REQUEST);
             }
 
-            return String.format("\"error\": \"%s\"", error);
+            return new ResponseEntity<>("Success", HttpStatus.OK);
         }
 
         @PostMapping("/register")
         private Boolean register(@RequestParam String name,
                                  @RequestParam String password)
         {
-            users.add(new User(users.size(), name, password));
-
+            User user = new User(name,password);
+            userRepositiry.save(user);
             return true;
         }
 
