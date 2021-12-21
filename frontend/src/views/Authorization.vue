@@ -1,6 +1,6 @@
 <template>
   <div >
-
+    <form @submit.prevent="onSubmit">
     <Header/>
 
     <div class="form">
@@ -9,9 +9,10 @@
       <input type="password" placeholder="Пароль">
 
       <a class="forgot-p" href="#"> Забыли пароль?</a>
-      <button class="form-btn">Войти</button>
+      <button class="form-btn"><router-link to="/">Войти</router-link></button>
 
     </div>
+    </form>
     <Footer/>
   </div>
 </template>

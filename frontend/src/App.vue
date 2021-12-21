@@ -2,7 +2,38 @@
 <template>
     <router-view/>
 </template>
-
+<script>
+import qs from "querystring"
+export default {
+  data() {
+    return {
+      form: {
+        name: null,
+        password: null
+      },
+      isLogged: false
+    }
+  },
+  methods: {
+    onSubmit() {
+      this.$http.get("/users/login", {
+        params: this.form
+      })
+          .then(response => {
+            if (response.data === "Success") {
+              this.isLogged = true
+              this.$router.push({
+                name: "Home"
+              })
+            }
+          })
+    },
+    logout() {
+      this.isLogged = false
+    }
+  }
+}
+</script>
 <style lang="css">
 @import "assets/css/app.css";
 @import "assets/css/authorization.css";

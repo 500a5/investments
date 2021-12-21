@@ -11,9 +11,16 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/news")
+
 public class NewsController {
     @Autowired
     private NewsRepositity newsRepositiry;
+
+    @GetMapping("/list")
+    public List<News> list()
+    {
+        return newsRepositiry.findAll();
+    }
 
     @GetMapping("/getnewsid")
     public Optional<News> stage(@RequestParam(defaultValue = "0") int id)

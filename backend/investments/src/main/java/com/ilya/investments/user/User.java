@@ -1,5 +1,5 @@
 package com.ilya.investments.user;
-
+import com.sun.istack.NotNull;
 import javax.persistence.*;
 
 @Entity
